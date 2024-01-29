@@ -7,12 +7,14 @@ on:
       - master
       
   schedule:
-  - cron: "30 * * * *" # See https://crontab.guru/#0_7,9,11_*_*_1,3
+  - cron: "0 7,9,11 * * 1,3" # See https://crontab.guru/#0_7,9,11_*_*_1,3
 
 jobs:
   auto_commit:
     runs-on: ubuntu-latest
     steps:
+      - name: DEBUG 
+        run: echo "::debug::Ref = ${{github.ref}}"
       - uses: actions/checkout@v3      
         with:
          persist-credentials: false
@@ -25,8 +27,8 @@ jobs:
           
       - name: Commit changes
         run: |
-          git config --local user.email "2071916845@qq.com"
-          git config --local user.name "it985"
+          git config --local user.email "lizhongyuan3@yeah.net"
+          git config --local user.name "lizhongyuan3"
           git add -A
           
           arr[0]="chore(bot): 😂 auto commit"
@@ -45,8 +47,7 @@ jobs:
           git commit -m "${arr[$rand]}"
           
       - name: GitHub Push
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6.0
         with:
-          force-with-lease: true
           directory: "."
-          autocommit: ${{ secrets.autocommit }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
